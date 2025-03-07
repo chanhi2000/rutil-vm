@@ -15,7 +15,6 @@ import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
@@ -23,15 +22,15 @@ import javax.net.ssl.X509TrustManager
 open class OvirtRestConfig {
 
 	@Bean
-	open fun pkiResourceService() = retrofit().create(PkiResourceService::class.java)
+	open fun pkiResourceService() = ovirtRestRetrofit().create(PkiResourceService::class.java)
 
 	@Bean
-	open fun retrofit(): Retrofit {
+	open fun ovirtRestRetrofit(): Retrofit {
 		log.info("retrofit ...")
 		val baseUrl = "${ovirtBaseURL}/ovirt-engine/services/"
 		return Retrofit.Builder()
 				.baseUrl(baseUrl)
-				.client(okHttpClient())
+				.client(ovirtRestOkHttpClient())
 				.addConverterFactory(ScalarsConverterFactory.create())
 				.build()
 	}
@@ -44,18 +43,11 @@ open class OvirtRestConfig {
 		get() = "https://${ovirtIp}${if (ovirtPortSsl == 443) "" else ":${ovirtPortSsl}"}"
 
 	@Bean
-	open fun okHttpClient(): OkHttpClient {
-		log.info("okHttpClient ...")
-		val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-			override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String? ) {}
-			override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-			override fun getAcceptedIssuers(): Array<X509Certificate> {
-				return arrayOf()
-			}
-		})
+	open fun ovirtRestOkHttpClient(): OkHttpClient {
+		log.info("ovirtRestOkHttpClient ...")
 		// Install the all-trusting trust manager
 		val sslContext: SSLContext = SSLContext.getInstance("SSL")
-		sslContext.init(null, trustAllCerts, SecureRandom())
+		sslContext.init(null, ovirtRestTrustAllCerts(), SecureRandom())
 
 		// Create an ssl socket factory with our all-trusting manager
 		val socketFactory = sslContext.socketFactory
@@ -63,7 +55,7 @@ open class OvirtRestConfig {
 			this.level = HttpLoggingInterceptor.Level.BODY
 		}
 		return OkHttpClient.Builder()
-			.sslSocketFactory(socketFactory, trustAllCerts[0] as X509TrustManager)
+			.sslSocketFactory(socketFactory, ovirtRestTrustAllCerts()[0] as X509TrustManager)
 			.hostnameVerifier { _, _ -> true }
 			.addInterceptor(interceptor)
 			.readTimeout(20, TimeUnit.SECONDS)
@@ -71,30 +63,15 @@ open class OvirtRestConfig {
 	}
 
 	@Bean
-	open fun sslSocketFactory(): SSLSocketFactory {
-		// Install the all-trusting trust manager
-		val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-			override fun checkClientTrusted(
-				chain: Array<out X509Certificate>?,
-				authType: String?
-			) {
-			}
-
-			override fun checkServerTrusted(
-				chain: Array<out X509Certificate>?,
-				authType: String?
-			) {
-			}
-
+	open fun ovirtRestTrustAllCerts(): Array<TrustManager> {
+		log.info("ovirtRestTrustAllCerts ...")
+		return arrayOf(object : X509TrustManager {
+			override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String? ) {}
+			override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
 			override fun getAcceptedIssuers(): Array<X509Certificate> {
 				return arrayOf()
 			}
 		})
-		val sslContext: SSLContext = SSLContext.getInstance("SSL")
-		sslContext.init(null, trustAllCerts, SecureRandom())
-
-		// Create an ssl socket factory with our all-trusting manager
-		return sslContext.socketFactory
 	}
 
 	companion object {

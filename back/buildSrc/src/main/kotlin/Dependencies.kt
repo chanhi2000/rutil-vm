@@ -97,6 +97,7 @@ object Dependencies {
 	val retrofit2 = listOf(
 		"com.squareup.retrofit2:retrofit:${Versions.retrofit2}",
 		"com.squareup.retrofit2:converter-scalars:${Versions.retrofit2}",
+		"com.squareup.retrofit2:converter-gson:${Versions.retrofit2}",
 	) + okhttp3
     val qemu = listOf(
         "org.anarres.qemu:qemu-examples:${Versions.qemu}",

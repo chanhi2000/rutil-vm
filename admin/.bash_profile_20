@@ -61,3 +61,7 @@ function loadDkf() {
   docker load -i $1;
   docker tag $DOCKER_IMG_RUTIL_VM_CURRENT $DOCKER_IMG_RUTIL_VM_LATEST;
 }
+
+function tailOvirtLog() {
+  tail -200f /var/log/ovirt-engine/engine.log
+}

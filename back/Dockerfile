@@ -24,11 +24,13 @@ COPY rutil-vm-api-ovirt-business /home/gradle/project/rutil-vm-api-ovirt-busines
 COPY rutil-vm-api-cert /home/gradle/project/rutil-vm-api-cert
 COPY rutil-vm-api-repository /home/gradle/project/rutil-vm-api-repository
 COPY rutil-vm-api-socket /home/gradle/project/rutil-vm-api-socket
+COPY rutil-vm-api-vmware /home/gradle/project/rutil-vm-api-vmware
 COPY rutil-vm-common /home/gradle/project/rutil-vm-common
 COPY rutil-vm-util /home/gradle/project/rutil-vm-util
 COPY rutil-vm-util-cert /home/gradle/project/rutil-vm-util-cert
 COPY rutil-vm-util-ovirt /home/gradle/project/rutil-vm-util-ovirt
 COPY rutil-vm-util-ssh /home/gradle/project/rutil-vm-util-ssh
+
 
 
 # Copy the node build results to path (ONLY when skipNpm=true)

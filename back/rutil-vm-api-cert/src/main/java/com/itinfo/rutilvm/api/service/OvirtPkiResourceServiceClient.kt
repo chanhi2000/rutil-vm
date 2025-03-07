@@ -1,11 +1,12 @@
-package com.itinfo.rutilvm.api.configuration
+package com.itinfo.rutilvm.api.service
 
+import com.itinfo.rutilvm.api.configuration.PkiResourceService
 import com.itinfo.rutilvm.common.LoggerDelegate
 import retrofit2.Response
 import org.springframework.stereotype.Service
 
 @Service
-open class PkiServiceClient(
+open class OvirtPkiResourceServiceClient(
 	private val pkiResourceService: PkiResourceService
 ) {
 	@Throws(Exception::class)

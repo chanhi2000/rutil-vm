@@ -5,7 +5,7 @@ if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
 
-export DOCKER_COMPOSE_FILENAME=deploy-local-70.yaml
+export DOCKER_COMPOSE_FILENAME=deploy-local-180.yaml
 PATH=$PATH:$HOME/bin
 export RUTIL_VM_HOME=$HOME/rutil-vm
 export PATH
@@ -20,7 +20,7 @@ export DOCKER_IMG_RUTIL_VM=ititcloud/rutil-vm
 export DOCKER_IMG_RUTIL_VM_CURRENT=$DOCKER_IMG_RUTIL_VM:$DOCKER_IMG_RUTIL_VM_API_VERSION
 export DOCKER_IMG_RUTIL_VM_LATEST=$DOCKER_IMG_RUTIL_VM:latest
 
-function dp() {
+function dp() { 
   docker ps -a
 }
 #

@@ -2,6 +2,7 @@ package com.itinfo.rutilvm.api.configuration
 
 import com.itinfo.rutilvm.api.cert.CertManager
 import com.itinfo.rutilvm.api.cert.toCertManager
+import com.itinfo.rutilvm.api.service.OvirtPkiResourceServiceClient
 import com.itinfo.rutilvm.common.LoggerDelegate
 import com.itinfo.rutilvm.util.cert.model.EngineCertType
 import com.itinfo.rutilvm.util.ssh.model.RemoteConnMgmt
@@ -26,7 +27,7 @@ import javax.annotation.PostConstruct
 open class CertConfig(
 
 ) {
-	@Autowired private lateinit var pkiServiceClient: PkiServiceClient
+	@Autowired private lateinit var pkiServiceClient: OvirtPkiResourceServiceClient
 
 	@Value("\${application.ovirt.ssh.jsch.log.enabled}")	private lateinit var _jschLogEnabled: String
 	@Value("\${application.ovirt.ssh.prvkey.location}")		private lateinit var _ovirtSSHPrivateKeyLocation: String
@@ -103,6 +104,5 @@ open class CertConfig(
 
 	companion object {
 		private val log by LoggerDelegate()
-		private const val DEFAULT_SPLIT = "|"
 	}
 }
